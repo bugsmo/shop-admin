@@ -4,7 +4,7 @@ import 'element-plus/dist/index.css'
 // import './style.css'
 import App from './App.vue'
 import 'virtual:windi.css'
-import router from "./router";
+import {router} from "./router";
 import store from "./store";
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
