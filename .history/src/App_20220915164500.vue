@@ -9,7 +9,7 @@
 </template>
 
 <style>
-    body{
+    .body{
         @apply bg-gray-100;
     }
 #nprogress .bar {
