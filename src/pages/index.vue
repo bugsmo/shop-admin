@@ -46,6 +46,15 @@
                 </el-card>
             </el-col>
         </el-row>
+        <IndexNavs/>
+
+        <el-row :gutter="20">
+            <el-col :span="12" :offset="0">
+            <IndexCharts/>
+            </el-col>
+            <el-col :span="12" :offset="0"></el-col>
+        </el-row>
+        
     </div>
 </template>
 
@@ -53,11 +62,12 @@
 import { ref } from 'vue';
 import { getStatistics1 } from '~/api/index.js';
 import CountTo from '~/components/CountTo.vue';
+import IndexNavs from '~/components/IndexNavs.vue';
+import IndexCharts from '~/components/IndexCharts.vue';
 
 const panels = ref([])
 getStatistics1()
     .then(res => {
-        panels.value = res.panels
-        console.log(panels.value);
+        panels.value = res.panels;
     })
 </script>
