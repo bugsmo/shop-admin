@@ -38,7 +38,7 @@ router.beforeEach(async (to, from, next) => {
     }
 
     // 动态标题
-    let title = (to.meta.title ? to.meta.title : "") + " 莫维龙"
+    let title = (to.meta.title ? to.meta.title : "") + "莫维龙"
     document.title = title
     
     // 判断是否有新路由，有就走指定路由

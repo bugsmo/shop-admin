@@ -5,7 +5,7 @@ import store from './store'
 
 // 全局前置守卫
 // 防止多次触发请求getinfo
-let hasGetInfo = false
+const hasGetInfo = false
 router.beforeEach(async (to, from, next) => {
     // 显示全局loading
     showFullLoading()
@@ -38,7 +38,7 @@ router.beforeEach(async (to, from, next) => {
     }
 
     // 动态标题
-    let title = (to.meta.title ? to.meta.title : "") + " 莫维龙"
+    let title = (to.meta.title ? to.meta.title : "") + "莫维龙"
     document.title = title
     
     // 判断是否有新路由，有就走指定路由

@@ -35,25 +35,11 @@ import FTagList from './components/FTagList.vue';
     transition: all 0.2s;
 }
 
-.fade-enter-from {
-    opacity: 0;
-}
-.fade-enter-to {
-    opacity: 1;
+.fade-enter-from{
+ opacity: 0;
 }
 
-.fade-leave-from {
-    opacity: 1;
-}
-.fade-leave-to {
-    opacity: 0;
-}
+.fade-enter-to{
 
-.fade-enter-active, .fade-leave-active{
-    transition: all 0.3s;
-}
-
-.fade-enter-active{
-    transition-delay: 0.3s;
 }
 </style>

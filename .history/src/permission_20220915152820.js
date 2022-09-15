@@ -5,7 +5,7 @@ import store from './store'
 
 // 全局前置守卫
 // 防止多次触发请求getinfo
-let hasGetInfo = false
+const hasGetInfo = false
 router.beforeEach(async (to, from, next) => {
     // 显示全局loading
     showFullLoading()
@@ -26,19 +26,18 @@ router.beforeEach(async (to, from, next) => {
 
     let hasNewRoutes = false
     // 如果用户登录了，自动获取用户信息，并存储在vuex当中
-    if (token && !hasGetInfo) {
+    if (token) {
         // 异步操作，需要await
         // store已经存储了menus，放在resolve(res)
         // res存储了菜单，解构菜单 {menus}直接获取到菜单
         let {menus} = await store.dispatch("getinfo")
-        hasGetInfo = true
         // console.log(menus);
         //动态添加路由
         hasNewRoutes = addRoutes(menus)
     }
 
     // 动态标题
-    let title = (to.meta.title ? to.meta.title : "") + " 莫维龙"
+    let title = (to.meta.title ? to.meta.title : "") + "莫维龙"
     document.title = title
     
     // 判断是否有新路由，有就走指定路由

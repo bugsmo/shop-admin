@@ -1,5 +1,6 @@
 <template>
     <div class="f-tag-list" :style="{left: $store.state.asideWidth}">
+
         <el-tabs v-model="activeTab" type="card" class="flex-1" @tab-remove="removeTab" style="min-width:100px;" @tab-change="changeTab">
             <!-- closable 根路由关联的标签不可关闭 -->
             <el-tab-pane :closable="item.path != '/'" v-for="item in tabList" :key="item.path" :label="item.title"
@@ -8,7 +9,7 @@
         </el-tabs>
 
         <span class="tag-btn">
-            <el-dropdown @command="handleClose">
+            <el-dropdown>
                 <span class="el-dropdown-link">
                     <el-icon>
                         <arrow-down />
@@ -16,27 +17,66 @@
                 </span>
                 <template #dropdown>
                     <el-dropdown-menu>
-                        <el-dropdown-item command="clearOther">关闭其他</el-dropdown-item>
-                        <el-dropdown-item command="clearAll">全部关闭</el-dropdown-item>
+                        <el-dropdown-item>Action 1</el-dropdown-item>
+                        <el-dropdown-item>Action 2</el-dropdown-item>
+                        <el-dropdown-item>Action 3</el-dropdown-item>
+                        <el-dropdown-item disabled>Action 4</el-dropdown-item>
+                        <el-dropdown-item divided>Action 5</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
         </span>
-    </div>
 
-    <div style="height:44px;"></div>
+    </div>
 </template>
 
 <script setup>
-import { useTabList} from '~/composables/useTabList'
+import { ref } from 'vue'
+import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { useCookies } from '@vueuse/integrations/useCookies';
+import { router } from '../../router';
 
-const {
-    activeTab,
-    tabList,
-    changeTab,
-    removeTab,
-    handleClose
-}=useTabList()
+//路由关联tab
+const route = useRoute()
+const activeTab = ref(route.path)
+
+// cookie 存储新增的tab页
+const cookie = useCookies()
+
+const tabList = ref([
+    {
+        title: '后台首页',
+        path: '/'
+    },
+])
+
+// 添加tab页 
+function addTab(tab) {
+    // 通过查找tab列表的回调t，判断是否有路由相同的tab
+    let noTab = tabList.value.findIndex(t => t.path == tab.path) == -1
+    if (noTab) {
+        tabList.value.push(tab)
+    }
+    // cookie 存储新增的tab页
+    cookie.set("tabList", tabList.value)
+}
+
+//监听路由，实现新建tab页
+onBeforeRouteUpdate((to, from) => {
+    activeTab.value = to.path
+    addTab({
+        title: to.meta.title,
+        path: to.path
+    })
+})
+
+const changeTab = (t)=>{
+    router.push(t)
+}
+
+const removeTab = (targetName) => {
+
+}
 </script>
 
 <style scoped>
@@ -54,7 +94,6 @@ const {
 }
 
 :deep(.el-tabs__header) {
-    border: 0 !important;
     @apply mb-0;
 }
 
