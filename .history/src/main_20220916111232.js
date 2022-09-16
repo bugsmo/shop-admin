@@ -20,7 +20,7 @@ app.use(store)
 app.use(ElementPlus)
 import 'nprogress/nprogress.css'
 import "~/permission.js"
-import permission from '~/directives/permission.js'
+import permission from '~/directives/permission'
 
 app.use(permission)
 

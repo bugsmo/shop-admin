@@ -46,10 +46,9 @@ const handleChoose = (value) => {
 var myChart = null
 onMounted(() => {
     var chartDom = document.getElementById('chart');
-    if(chartDom){
-        myChart = echarts.init(chartDom);
-        getData()
-    }
+    myChart = echarts.init(chartDom);
+
+    getData()
 })
 
 // 防止echarts未释放导致白屏

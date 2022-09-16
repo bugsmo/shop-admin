@@ -26,7 +26,7 @@
 
             <!-- 6*4=24分栏 4个框 -->
             <el-col :span="6" :offset="0" v-for="(item,index) in panels" :key="index">
-                <el-card shadow="hover" class="border-0"  v-permission="['getStatistics1,GET']">
+                <el-card shadow="hover" class="border-0">
                     <template #header>
                         <div class="flex justify-between">
                             <span class="text-sm">{{ item.title }}</span>
@@ -52,7 +52,7 @@
             <el-col :span="12" :offset="0">
             <IndexCharts v-permission="['getStatistics3,GET']"/>
             </el-col>
-            <el-col :span="12" :offset="0" v-permission="['getStatistics2,GET']">
+            <el-col :span="12" :offset="0">
                 <IndexCard title="店铺及商品提示" tips="店铺及商品提示" :btns="goods"/>
                 <IndexCard title="交易提示" tips="需要立即处理的交易订单" :btns="order" />
             </el-col>

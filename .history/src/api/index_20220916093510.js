@@ -5,7 +5,7 @@ export function getStatistics1() {
 }
 
 export function getStatistics2() {
-    return axios.get("/admin/statistics2")
+    return axios.get("/admin/statistics2)
 }
 
 export function getStatistics3(type) {

@@ -26,7 +26,7 @@
 
             <!-- 6*4=24分栏 4个框 -->
             <el-col :span="6" :offset="0" v-for="(item,index) in panels" :key="index">
-                <el-card shadow="hover" class="border-0"  v-permission="['getStatistics1,GET']">
+                <el-card shadow="hover" class="border-0">
                     <template #header>
                         <div class="flex justify-between">
                             <span class="text-sm">{{ item.title }}</span>
@@ -48,13 +48,12 @@
         </el-row>
         <IndexNavs/>
 
-        <el-row :gutter="20" class="mt-5">
+        <el-row :gutter="20">
             <el-col :span="12" :offset="0">
-            <IndexCharts v-permission="['getStatistics3,GET']"/>
+            <IndexCharts/>
             </el-col>
-            <el-col :span="12" :offset="0" v-permission="['getStatistics2,GET']">
-                <IndexCard title="店铺及商品提示" tips="店铺及商品提示" :btns="goods"/>
-                <IndexCard title="交易提示" tips="需要立即处理的交易订单" :btns="order" />
+            <el-col :span="12" :offset="0">
+                <IndexCard title="aaa" tips="aasssss" />
             </el-col>
         </el-row>
         
@@ -63,7 +62,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import { getStatistics1, getStatistics2 } from '~/api/index.js';
+import { getStatistics1 } from '~/api/index.js';
 import CountTo from '~/components/CountTo.vue';
 import IndexNavs from '~/components/IndexNavs.vue';
 import IndexCharts from '~/components/IndexCharts.vue';
@@ -73,13 +72,5 @@ const panels = ref([])
 getStatistics1()
     .then(res => {
         panels.value = res.panels;
-    })
-
-const goods = ref([])
-const order = ref([])
-getStatistics2()
-    .then((res)=>{
-        goods.value = res.goods
-        order.value = res.order
     })
 </script>

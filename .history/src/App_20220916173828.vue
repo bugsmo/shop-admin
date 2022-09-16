@@ -8,10 +8,10 @@
   
 </template>
 <!-- 
-    ::-webkit-scrollbar 全局滚动条样式
+    ::-webkit-scrollbar 全局滚动条样式 ::-webkit-scrollbar-thumb 小方块
  -->
 <style>
-body{
+    body{
         @apply bg-gray-100;
     }
 #nprogress .bar {
@@ -28,12 +28,6 @@ padding: 1px;
 }
 ::-webkit-scrollbar-thumb{
     border-radius: 8px;
-    background-color: rgba(0, 0, 0, 0.2);
-}
-::-webkit-scrollbar-thumb,
-::-webkit-scrollbar-track{
-    border-right-color: transparent;
-    border-left-color: transparent;
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.02);
 }
 </style>

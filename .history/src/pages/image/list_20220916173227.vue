@@ -11,12 +11,12 @@
                 </div>
             </el-aside>
             <el-main class="image-main">
-                <div class="top">
-                    <div v-for="i in 100" :key="i">{{i}}</div>
+                <!-- <div class="top" v-for="i in 100" :key="i">
+                    {{i}}
                 </div>
                 <div class="bottom">
                     分页区域
-                </div>
+                </div> -->
             </el-main>
         </el-container>
     </el-container>

@@ -48,8 +48,8 @@ onMounted(() => {
     var chartDom = document.getElementById('chart');
     if(chartDom){
         myChart = echarts.init(chartDom);
-        getData()
     }
+    getData()
 })
 
 // 防止echarts未释放导致白屏

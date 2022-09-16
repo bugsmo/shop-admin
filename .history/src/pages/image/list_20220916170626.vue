@@ -1,0 +1,17 @@
+<template>
+    <el-container class="bg-white rounded" :style="{height: (h + 'px')}">
+        <el-header>Header</el-header>
+        <el-container>
+            <el-aside width="200px">Aside</el-aside>
+            <el-main>Main</el-main>
+        </el-container>
+    </el-container>
+</template>
+
+<script setup>
+    // 容器占满主体空间
+    // 浏览器可视部分的高度 或 
+    const windowHeight = window.innerHeight || document.body.clientHeight
+    // 减去header等的高度 padding 40
+    const h = windowHeight - 64 - 44 - 40
+</script>

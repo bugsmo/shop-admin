@@ -26,7 +26,7 @@
 
             <!-- 6*4=24分栏 4个框 -->
             <el-col :span="6" :offset="0" v-for="(item,index) in panels" :key="index">
-                <el-card shadow="hover" class="border-0"  v-permission="['getStatistics1,GET']">
+                <el-card shadow="hover" class="border-0">
                     <template #header>
                         <div class="flex justify-between">
                             <span class="text-sm">{{ item.title }}</span>

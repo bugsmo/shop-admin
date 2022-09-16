@@ -50,6 +50,7 @@ onMounted(() => {
         myChart = echarts.init(chartDom);
         getData()
     }
+    
 })
 
 // 防止echarts未释放导致白屏

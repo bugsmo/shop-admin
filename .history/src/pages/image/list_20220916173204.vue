@@ -11,12 +11,12 @@
                 </div>
             </el-aside>
             <el-main class="image-main">
-                <div class="top">
-                    <div v-for="i in 100" :key="i">{{i}}</div>
+                <!-- <div class="top" v-for="i in 100" :key="i">
+                    {{i}}
                 </div>
                 <div class="bottom">
                     分页区域
-                </div>
+                </div> -->
             </el-main>
         </el-container>
     </el-container>
@@ -39,10 +39,11 @@ const h = windowHeight - 64 - 44 - 40
     border-right: 1px solid #eeeeee;
     position: relative;
 }
+
 .image-main{
     position: relative;
 }
-.image-aside .top,.image-main .top{
+.image-aside .top{
     position: absolute;
     top: 0;
     right: 0;
@@ -50,7 +51,7 @@ const h = windowHeight - 64 - 44 - 40
     bottom: 50px;
     overflow-y: auto;
 }
-.image-aside .bottom,.image-main .bottom{
+.image-aside .bottom{
     position: absolute;
     bottom: 0;
     left: 0;
