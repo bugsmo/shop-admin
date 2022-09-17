@@ -1,61 +1,46 @@
 <template>
     <el-container class="bg-white rounded" :style="{height: (h + 'px')}">
-        <el-header class="image-header">Header</el-header>
+        <el-header class="image-header">
+            <el-button type="primary" size="small" @click="handleOpenCreate">新增图片分类</el-button>
+            <el-button type="warning" size="small" @click="handleOpenUpload">上传图片</el-button>
+        </el-header>
         <el-container>
-            <el-aside width="200px" class="image-aside">
-                <div class="top">
-                    <div v-for="i in 100" :key="i">{{i}}</div>
-                </div>
-                <div class="bottom">
-                    分页区域
-                </div>
-            </el-aside>
-            <el-main class="image-main">
-                <div class="top">
-                    <div v-for="i in 100" :key="i">{{i}}</div>
-                </div>
-                <div class="bottom">
-                    分页区域
-                </div>
-            </el-main>
+            <ImageAside ref="ImageAsideRef" @change="handleAsideChange"/>
+            <ImageMain ref="ImageMainRef"/>
         </el-container>
     </el-container>
 </template>
 
 <script setup>
+    import { ref } from 'vue';
+import ImageAside from '~/components/ImageAside.vue';
+import ImageMain from '~/components/ImageMain.vue';
+
 // 容器占满主体空间
 // 浏览器可视部分的高度 或 
 const windowHeight = window.innerHeight || document.body.clientHeight
 // 减去header等的高度 padding 40
 const h = windowHeight - 64 - 44 - 40
+
+const ImageAsideRef = ref(null)
+const handleOpenCreate = ()=>{
+    ImageAsideRef.value.handleCreate()
+}
+
+const ImageMainRef=ref(null)
+const handleAsideChange=(imageClassId)=>{
+    ImageMainRef.value.loadData(imageClassId)
+}
+
+const handleOpenUpload=()=>{
+    ImageMainRef.value.openUploadFile()
+}
+
 </script>
 
 <style>
 .image-header {
     border-bottom: 1px solid #eeeeee;
     @apply flex items-center;
-}
-.image-aside{
-    border-right: 1px solid #eeeeee;
-    position: relative;
-}
-.image-main{
-    position: relative;
-}
-.image-aside .top,.image-main .top{
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 50px;
-    overflow-y: auto;
-}
-.image-aside .bottom,.image-main .bottom{
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 50px;
-    @apply flex justify-center items-center;
 }
 </style>
