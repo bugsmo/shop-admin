@@ -6,7 +6,7 @@
             <el-tooltip effect="dark" content="刷新" placement="top">
                 <el-button>
                     <el-icon :size="20">
-                        <Refresh @click="getData()"/>
+                        <Refresh @click="getData()" />
                     </el-icon>
                 </el-button>
             </el-tooltip>
@@ -19,12 +19,12 @@
                 <template #default="scope">
                     <el-button type="primary" size="small" text @click="handleEdit(scope.row)">修改</el-button>
                     <el-popconfirm title="是否要删除该公告?" confirm-button-text="确认" cancel-button-text="取消"
-                @confirm="handleDelete(scope.row.id)">
-                <template #reference>
-                    <el-button text type="primary" size="small">删除
-                    </el-button>
-                </template>
-            </el-popconfirm>
+                        @confirm="handleDelete(scope.row.id)">
+                        <template #reference>
+                            <el-button text type="primary" size="small">删除
+                            </el-button>
+                        </template>
+                    </el-popconfirm>
                 </template>
             </el-table-column>
         </el-table>
@@ -38,134 +38,60 @@
                 <el-form-item label="公告标题" prop="title">
                     <el-input v-model="form.title" placeholder="公告标题"></el-input>
                 </el-form-item>
-                <el-form-item label="公告内容"  prop="content">
+                <el-form-item label="公告内容" prop="content">
                     <el-input v-model="form.content" placeholder="公告内容" type="textarea" :rows="5"></el-input>
                 </el-form-item>
             </el-form>
-            
+
         </FormDrawer>
     </el-card>
 
 </template>
 
 <script setup>
-import { ref,reactive,computed } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import FormDrawer from '~/components/FormDrawer.vue';
 import { toast } from '~/composables/utils';
-import {getNoticeList,createNotice,updateNotice,deleteNotice} from '~/api/notice.js';
+import { getNoticeList, createNotice, updateNotice, deleteNotice } from '~/api/notice.js';
+import { useInitTable, useInitForm } from '~/composables/useCommon.js';
 
-const tableData = ref([])
-//加载动画
-const loading = ref(false)
-//分页
-const currentPage = ref(1)
-const totalCount = ref(0)
-const limit = ref(10)
-
-//获取数据
-function getData(page = null) {
-    //输入为数字
-    if (typeof page == "number") {
-        currentPage.value = page
-    }
-    loading.value = true
-    getNoticeList(currentPage.value)
-        .then(res => {
-            // console.log(res);
-            tableData.value = res.list
-            totalCount.value = res.totalCount
-        })
-        .finally(() => {
-            loading.value = false
-        })
-}
-
-getData()
-
-
-
-//删除
-const handleDelete = (id)=>{
-    loading.value = true
-    deleteNotice(id)
-    .then(res=>{
-        toast("删除成功")
-        getData()
-    })
-    .finally(()=>{
-        loading.value = false
-    })
-}
-
-//表单部分
-const formDrawerRef = ref(null)
-const formRef = ref(null)
-const form =  reactive({
-    title:"",
-    content:""
+const {
+    tableData,
+    loading,
+    currentPage,
+    totalCount,
+    limit,
+    getData,
+    handleDelete,
+} = useInitTable({
+    getList: getNoticeList,
+    delete: deleteNotice
 })
-const rules = {
-    title: [
-        { required: true, message: '公告标题必填', trigger: 'blur' }
-    ],
-    content: [
-        { required: true, message: '公告内容必填', trigger: 'blur' }
-    ]
-}
 
-const handleSubmit = ()=>{
-    formRef.value.validate((valid)=>{
-        if(!valid){
-            return
-        }
-
-        formDrawerRef.value.showLoading()
-
-        const fun = editId.value ? updateNotice(editId.value,form) : createNotice(form)
-
-        fun.then(res=>{
-            toast(drawerTitle.value +"成功")
-            getData(editId.value ? false : 1)
-            formDrawerRef.value.close()
-        })
-        .finally(()=>{
-            formDrawerRef.value.hideLoading()
-        })
-    })
-}
-
-//重置表单
-function resetForm(row = false){
-    if(formRef.value){
-        formRef.value.clearValidate()
+const {
+    formDrawerRef,
+    formRef,
+    form,
+    rules,
+    drawerTitle,
+    handleSubmit,
+    handleCreate,
+    handleEdit
+} = useInitForm({
+    getData,
+    update: updateNotice,
+    create: createNotice,
+    form: {
+        title: "",
+        content: ""
+    },
+    rules: {
+        title: [
+            { required: true, message: '公告标题必填', trigger: 'blur' }
+        ],
+        content: [
+            { required: true, message: '公告内容必填', trigger: 'blur' }
+        ]
     }
-
-    if(row){
-        for(const key in form){
-            form[key] = row[key]
-        }
-    }
-}
-
-//新增
-const handleCreate = ()=>{
-    editId.value = 0
-    resetForm({
-        title:"",
-        content:""
-    })
-    formDrawerRef.value.open()
-}
-
-//修改
-// editId 判断新增还是修改 0是新增
-const editId = ref(0)
-const drawerTitle = computed(()=>editId.value ? "修改" : "新增")
-
-const handleEdit = (row)=>{
-    // console.log(row);
-    editId.value = row.id
-    resetForm(row)
-    formDrawerRef.value.open()
-}
+})
 </script>
