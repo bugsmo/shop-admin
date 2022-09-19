@@ -1,0 +1,33 @@
+<script setup>
+
+</script>
+
+<template>
+<router-view></router-view>
+
+  
+</template>
+<!-- 
+    ::-webkit-scrollbar 全局滚动条样式 ::-webkit-scrollbar-thumb 小方块
+ -->
+<style>
+    body{
+        @apply bg-gray-100;
+    }
+#nprogress .bar {
+background-color: rgb(0, 255, 64)!important;;
+padding: 1px;
+}
+
+::-webkit-scrollbar{
+    width: 4px;
+    height: 6px;
+}
+::-webkit-scrollbar-corner{
+    display: block;
+}
+::-webkit-scrollbar-thumb{
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.02);
+}
+</style>
