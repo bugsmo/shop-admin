@@ -1,4 +1,5 @@
 <template>
+    
     <el-card shadow="never">
         <!-- 新增和刷新 -->
         <ListHeader @create="handleCreate" @refresh="getData" />
@@ -12,11 +13,17 @@
                     </el-icon>
                     <span>{{data.name}}</span>
                     <div class="ml-auto">
-                        <el-switch :modelValue="data.status" :active-value="1" :inactive-value="0">
+                        <el-switch :modelValue="data.status" :active-value="1" :inactive-value="0" @change="handleStatusChange($event,data)">
                         </el-switch>
                         <el-button text type="primary" size="small" @click.stop="handleEdit(data)">修改</el-button>
-                        <el-button text type="primary" size="small">增加</el-button>
-                        <el-button text type="primary" size="small">删除</el-button>
+                        <el-button text type="primary" size="small" @click.stop="addChild(data.id)">增加</el-button>
+                        <el-popconfirm title="是否要删除该记录?" confirm-button-text="确认" cancel-button-text="取消"
+                            @confirm="handleDelete(data.id)">
+                            <template #reference>
+                                <el-button text type="primary" size="small">删除
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
                     </div>
                 </div>
             </template>
@@ -38,7 +45,7 @@
                     <el-input v-model="form.name" style="width:30%;" placeholder="名称"></el-input>
                 </el-form-item>
                 <el-form-item label="菜单图标" prop="icon" v-if="form.menu == 1">
-                    <el-input v-model="form.icon"></el-input>
+                    <IconSelect v-model="form.icon" />
                 </el-form-item>
                 <el-form-item label="前端路由" prop="frontpath" v-if="form.menu == 1 && form.rule_id>0" placeholder="前端路由">
                     <el-input v-model="form.frontpath"></el-input>
@@ -64,23 +71,28 @@
 <script setup>
 import { ref } from 'vue'
 import ListHeader from '~/components/ListHeader.vue';
-import { getRuleList, createRule, updateRule } from '~/api/rule.js'
+import { getRuleList, createRule, updateRule,updateRuleStatus,deleteRule } from '~/api/rule.js'
 import { useInitTable, useInitForm } from '~/composables/useCommon.js';
 import FormDrawer from '~/components/FormDrawer.vue';
+import IconSelect from '~/components/IconSelect.vue';
 
 const options = ref([])
 const defaultExpandedKeys = ref([])
 const {
     loading,
     tableData,
-    getData
+    getData,
+    handleDelete,
+    handleStatusChange
 } = useInitTable({
     getList: getRuleList,
     onGetListSuccess: (res) => {
         options.value = res.rules
         tableData.value = res.list
         defaultExpandedKeys.value = res.list.map(o => o.id)
-    }
+    },
+    delete: deleteRule,
+    updateStatus: updateRuleStatus
 })
 
 const {
@@ -111,6 +123,12 @@ const {
     }
 })
 
+//添加子分类
+const addChild = (id) => {
+    handleCreate()
+    form.rule_id = id
+    form.status = 1
+}
 
 const defaultProps = {
     label: "name",
