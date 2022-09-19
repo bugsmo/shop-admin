@@ -45,11 +45,6 @@ const route = useRoute()
 // 默认选择当前uri的菜单
 const defautActive = ref(route.path)
 
-//监听路由变化
-onBeforeRouteUpdate((to,from)=>{
-    defautActive.value = to.path
-})
-
 // 是否折叠菜单
 const isCollapse = computed(()=>!(store.state.asideWidth == '250px'))
 

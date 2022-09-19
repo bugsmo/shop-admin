@@ -40,8 +40,10 @@
 </template>
 
 <script setup>
+import { ref, reactive, computed } from 'vue';
 import FormDrawer from '~/components/FormDrawer.vue';
 import ListHeader from '~/components/ListHeader.vue';
+import { toast } from '~/composables/utils';
 import { getNoticeList, createNotice, updateNotice, deleteNotice } from '~/api/notice.js';
 import { useInitTable, useInitForm } from '~/composables/useCommon.js';
 
