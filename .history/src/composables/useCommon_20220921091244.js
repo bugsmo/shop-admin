@@ -67,14 +67,13 @@ export function useInitTable(opt = {}) {
             })
     }
 
-    // 修改状态
+    // 修改管理员状态
     const handleStatusChange = (status, row) => {
         row.statusLoading = true
         opt.updateStatus(row.id, status)
             .then(res => {
                 toast("修改状态成功")
                 row.status = status
-                getData()
             })
             .finally(() => {
                 row.statusLoading = false

@@ -74,7 +74,6 @@ export function useInitTable(opt = {}) {
             .then(res => {
                 toast("修改状态成功")
                 row.status = status
-                getData()
             })
             .finally(() => {
                 row.statusLoading = false

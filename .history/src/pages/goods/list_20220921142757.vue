@@ -106,7 +106,7 @@ import { ref } from 'vue';
 import FormDrawer from '~/components/FormDrawer.vue';
 import ListHeader from '~/components/ListHeader.vue';
 import ChooseImage from '~/components/ChooseImage.vue';
-import { getGoodsList, updateGoodsStatus, createGoods, updateGoods, deleteGoods } from '~/api/goods.js';
+import { getManagerList, updateManagerStatus, createManager, updateManager, deleteManager } from '~/api/manager.js';
 import { useInitTable, useInitForm } from '~/composables/useCommon.js';
 
 const roles = ref([])
@@ -125,7 +125,7 @@ const {
     searchForm: {
         keyword: ""
     },
-    getList: getGoodsList,
+    getList: getManagerList,
     onGetListSuccess: (res) => {
         roles.value = res.roles
         tableData.value = res.list.map((o) => {
@@ -135,8 +135,8 @@ const {
         })
         totalCount.value = res.totalCount
     },
-    delete: deleteGoods,
-    updateStatus: updateGoodsStatus
+    delete: deleteManager,
+    updateStatus: updateManagerStatus
 })
 
 const {
@@ -150,8 +150,8 @@ const {
     handleEdit
 } = useInitForm({
     getData,
-    update: updateGoods,
-    create: createGoods,
+    update: updateManager,
+    create: createManager,
     form: {
         username: "",
         password: "",
