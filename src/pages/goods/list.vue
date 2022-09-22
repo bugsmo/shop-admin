@@ -29,6 +29,7 @@
                 <el-button size="small" @click="handleMultiStatusChange(0)" v-if="searchForm.tab=='all' || searchForm.tab=='saling'">下架</el-button>
             </ListHeader>
 
+            <!-- 主体 -->
             <el-table ref="multipleTableRef" @selection-change="handleSelectionChange" :data="tableData" stripe
                 style="width: 100%" v-loading="loading">
                 <el-table-column type="selection" width="55" />
@@ -75,7 +76,8 @@
                             </el-button>
                             <el-button class="px-1" type="primary" size="small" text>商品规格</el-button>
                             <el-button class="px-1" :type="scope.row.goods_banner.length == 0 ? 'danger' : 'primary'" size="small" text @click="handleSetGoodsBanners(scope.row)" :loading="scope.row.bannersLoading">设置轮播图</el-button>
-                            <el-button class="px-1" type="primary" size="small" text>商品详情</el-button>
+
+                            <el-button class="px-1" :type="!scope.row.content ? 'danger' : 'primary'" size="small" text @click="handleSetGoodsContent(scope.row)" :loading="scope.row.contentLoading">商品详情</el-button>
                             <el-popconfirm title="是否要删除该商品?" confirm-button-text="确认" cancel-button-text="取消"
                                 @confirm="handleDelete(scope.row.id)">
                                 <template #reference>
@@ -89,11 +91,13 @@
                 </el-table-column>
             </el-table>
 
+            <!-- 分页 -->
             <div class="flex items-center justify-center mt-4">
                 <el-pagination background layout="prev,pager, next" :total="totalCount" :current-page="currentPage"
                     :page-size="limit" @current-change="getData" />
             </div>
 
+            <!-- 新增表单 -->
             <FormDrawer ref="formDrawerRef" :title="drawerTitle" @submit="handleSubmit">
                 <el-form :model="form" ref="formRef" :rules="rules" label-width="80px" :inline="false">
                     <el-form-item label="商品名称" prop="title">
@@ -151,6 +155,7 @@
             </FormDrawer>
         </el-card>
         <banners ref="bannersRef" @reload-data="getData"></banners>
+        <content ref="contentRef" @reload-data="getData"></content>
     </div>
 
 </template>
@@ -166,6 +171,7 @@ import { getGoodsList, updateGoodsStatus, createGoods, updateGoods, deleteGoods 
 import { getCategoryList } from '~/api/category.js'
 import { useInitTable, useInitForm } from '~/composables/useCommon.js';
 import banners from '~/pages/goods/banners.vue'
+import content from '~/pages/goods/content.vue'
 
 const {
     searchForm,
@@ -192,6 +198,7 @@ const {
         tableData.value = res.list.map((o) => {
             //修改状态时开启loading
             o.bannersLoading = false
+            o.contentLoading = false
             return o
         })
         totalCount.value = res.totalCount
@@ -267,4 +274,12 @@ const bannersRef=ref(null)
 const handleSetGoodsBanners=(row)=>{
     bannersRef.value.open(row)
 }
+
+//设置商品详情
+const contentRef=ref(null)
+const handleSetGoodsContent=(row)=>{
+    contentRef.value.open(row)
+}
+
+
 </script>
