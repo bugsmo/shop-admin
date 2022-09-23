@@ -1,5 +1,5 @@
 <template>
-    <FormDrawer ref="formDrawerRef" title="设置商品规格" destroy-on-close @submit="submit" size="70%">
+    <FormDrawer ref="formDrawerRef" title="设置商品详情" destroy-on-close @submit="submit">
         <el-form :model="form">
             <el-form-item>
                 <Editor v-model="form.content" />
@@ -17,20 +17,34 @@ import Editor from '~/components/Editor.vue';
 const formDrawerRef = ref(null)
 
 const form = reactive({
-    content:"",
+    sku_type: 0,
+    sku_value: {
+        "oprice": 0,
+        "pprice": 0,
+        "cprice": 0,
+        "weight": 0,
+        "volume": 0
+    }
 })
 
 const goodsId=ref(0)
 const open = (row)=>{
     goodsId.value = row.id
-    row.contentLoading = true
+    row.skusLoading = true
     readGoods(goodsId.value)
     .then(res=>{
-        form.content = res.content
+        form.sku_type = res.sku_type
+        form.sku_value = res.sku_value || {
+            "oprice": 0,
+            "pprice": 0,
+            "cprice": 0,
+            "weight": 0,
+            "volume": 0
+        }
         formDrawerRef.value.open()
     })
     .finally(()=>{
-        row.contentLoading = false
+        row.skusLoading = false
     })
     
 }

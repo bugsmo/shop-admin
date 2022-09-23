@@ -17,7 +17,14 @@ import Editor from '~/components/Editor.vue';
 const formDrawerRef = ref(null)
 
 const form = reactive({
-    content:"",
+    sku_type:0,
+    sku_value:{
+        oprice:0,
+        pprice:0,
+        cprice:0,
+        weight:0,
+        volume:0
+    }
 })
 
 const goodsId=ref(0)

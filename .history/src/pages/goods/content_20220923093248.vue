@@ -17,7 +17,14 @@ import Editor from '~/components/Editor.vue';
 const formDrawerRef = ref(null)
 
 const form = reactive({
-    content:"",
+    sku_type:0,
+    sku_value:{
+        "oprice":0,
+        "pprice":0,
+        "cprice":0,
+        "weight":0,
+        "volume":0
+    }
 })
 
 const goodsId=ref(0)
@@ -26,7 +33,14 @@ const open = (row)=>{
     row.contentLoading = true
     readGoods(goodsId.value)
     .then(res=>{
-        form.content = res.content
+        form.sku_type = res.sku_type
+        form.sku_value = res.sku_value || {
+            "oprice": 0,
+            "pprice": 0,
+            "cprice": 0,
+            "weight": 0,
+            "volume": 0
+        }
         formDrawerRef.value.open()
     })
     .finally(()=>{

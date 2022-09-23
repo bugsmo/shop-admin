@@ -74,13 +74,10 @@
                         <div v-if="searchForm.tab != 'delete'">
                             <el-button class="px-1" type="primary" size="small" text @click="handleEdit(scope.row)">修改
                             </el-button>
-
                             <el-button class="px-1" type="primary" size="small" text @click="handleSetGoodsSkus(scope.row)" :loading="scope.row.skusLoading">商品规格</el-button>
-
                             <el-button class="px-1" :type="scope.row.goods_banner.length == 0 ? 'danger' : 'primary'" size="small" text @click="handleSetGoodsBanners(scope.row)" :loading="scope.row.bannersLoading">设置轮播图</el-button>
 
                             <el-button class="px-1" :type="!scope.row.content ? 'danger' : 'primary'" size="small" text @click="handleSetGoodsContent(scope.row)" :loading="scope.row.contentLoading">商品详情</el-button>
-                            
                             <el-popconfirm title="是否要删除该商品?" confirm-button-text="确认" cancel-button-text="取消"
                                 @confirm="handleDelete(scope.row.id)">
                                 <template #reference>

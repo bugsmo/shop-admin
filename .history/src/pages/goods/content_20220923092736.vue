@@ -1,5 +1,5 @@
 <template>
-    <FormDrawer ref="formDrawerRef" title="设置商品规格" destroy-on-close @submit="submit" size="70%">
+    <FormDrawer ref="formDrawerRef" title="设置商品详情" destroy-on-close @submit="submit" size="70%">
         <el-form :model="form">
             <el-form-item>
                 <Editor v-model="form.content" />
