@@ -1,9 +1,16 @@
 <template>
-    <div v-if="modelValue">
-        <el-image :src="modelValue" fit="cover" class="w-[100px] h-[100ox] rounded border mr-2"></el-image>
-        
+    <div v-if="modelValue && preview">
+        <el-image v-if="typeof modelValue == 'string'" :src="modelValue" fit="cover" class="w-[100px] h-[100ox] rounded border mr-2"></el-image>
+        <div v-else class="flex flex-wrap">
+            <div class="relative mx-1 mb-2 w-[100px] h-[100ox]" v-for="(url, index) in modelValue" :key="index">
+                <el-icon class="absolute right-[5px] top-[5px] cursor-pointer bg-white rounded" style="z-index:10;" @click="removeImage(url)"><CircleClose/></el-icon>
+                <el-image :src="url" fit="cover"
+                    class="w-[100px] h-[100ox] rounded border mr-2"></el-image>
+            </div>
+        </div>
     </div>
-    <div class="choose-image-btn" @click="open">
+    
+    <div v-if="preview" class="choose-image-btn" @click="open">
         <el-icon :size="25" class="text-gray-500">
             <Plus />
         </el-icon>
@@ -18,7 +25,7 @@
             </el-header>
             <el-container>
                 <ImageAside ref="ImageAsideRef" @change="handleAsideChange" />
-                <ImageMain ref="ImageMainRef" openChoose @choose="handleChoose" />
+                <ImageMain :limit="limit" ref="ImageMainRef" openChoose @choose="handleChoose" />
             </el-container>
         </el-container>
         <template #footer>
@@ -28,18 +35,19 @@
             </span>
         </template>
     </el-dialog>
-
 </template>
 <script setup>
 import { ref } from 'vue';
 import ImageAside from '~/components/ImageAside.vue';
 import ImageMain from '~/components/ImageMain.vue';
+import { toast } from '~/composables/utils';
 
 const dialogVisiable = ref(false)
 
-
-
-const open = () => {
+//提交函数的回调函数，配置商品设置详情功能，富文本框显示图片
+const callBackSubmit = ref(null)
+const open = (callback = null) => {
+    callBackSubmit.value = callback
     dialogVisiable.value = true
 }
 
@@ -64,7 +72,16 @@ const handleOpenUpload=()=>{
 //实现v-model="form.avatar"
 // update事件动态更新modelValue的值
 const props = defineProps({
-    modelValue:[String,Array]
+    modelValue:[String,Array],
+    limit:{
+        type:Number,
+        default:1
+    },
+    //选择图片按钮，默认显示
+    preview:{
+        type:Boolean,
+        default:true
+    }
 })
 const emit = defineEmits(["update:modelValue"])
 
@@ -75,12 +92,33 @@ const handleChoose=(e)=>{
 }
 
 const submit = () => {
-    if(urls.length){
-        console.log(urls[0]);
-       emit("update:modelValue",urls[0])
+    let value = []
+    if(props.limit == 1){
+        value = urls[0]
+    }else{
+        value = props.preview ? [...props.modelValue, ...urls] : [...urls]
+        if (value.length > props.limit){
+            let limit = props.preview ? (props.limit - props.modelValue.length) : props.limit
+            return toast('最多还能选择' + limit + '张图片',"error")
+        }
+    }
+    if(value && props.preview){
+       emit("update:modelValue",value)
+    }
+    if(!props.preview && typeof callBackSubmit.value === "function"){
+        callBackSubmit.value(value)
     }
     close()
 }
+
+const removeImage = (url)=>{
+    emit("update:modelValue", props.modelValue.filter(o=>o !=url))
+}
+
+
+defineExpose({
+    open
+})
 </script>
 <style>
 .choose-image-btn {

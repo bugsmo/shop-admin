@@ -67,13 +67,14 @@ export function useInitTable(opt = {}) {
             })
     }
 
-    // 修改管理员状态
+    // 修改状态
     const handleStatusChange = (status, row) => {
         row.statusLoading = true
         opt.updateStatus(row.id, status)
             .then(res => {
                 toast("修改状态成功")
                 row.status = status
+                getData()
             })
             .finally(() => {
                 row.statusLoading = false
@@ -104,6 +105,23 @@ export function useInitTable(opt = {}) {
             })
     }
 
+    //批量修改状态
+    const handleMultiStatusChange = (status) => {
+        loading.value = true
+        opt.updateStatus(multiSelectionIds.value, status)
+            .then(res => {
+                toast("修改状态成功")
+                //清空选中
+                if (multipleTableRef.value) {
+                    multipleTableRef.value.clearSelection()
+                }
+                getData()
+            })
+            .finally(() => {
+                loading.value = false
+            })
+    }
+
     return {
         searchForm,
         resetSearchForm,
@@ -117,7 +135,9 @@ export function useInitTable(opt = {}) {
         handleStatusChange,
         handleSelectionChange,
         multipleTableRef,
-        handleMultiDelete
+        handleMultiDelete,
+        handleMultiStatusChange,
+        multiSelectionIds
     }
 }
 
