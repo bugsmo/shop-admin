@@ -23,6 +23,16 @@ export function deleteGoods(ids) {
 })
 }
 
+export function restoreGoods(ids) {
+    return axios.post(`/admin/goods/restore`, { ids
+})
+}
+
+export function destroyGoods(ids) {
+    return axios.post(`/admin/goods/destroy`, { ids
+})
+}
+
 export function readGoods(id) {
     return axios.get(`/admin/goods/read/${id}`)
 }
@@ -37,4 +47,32 @@ export function updateGoodsSkus(id, data) {
 
 export function createGoodsSkusCard(data) {
     return axios.post(`/admin/goods_skus_card`, data)
+}
+
+export function updateGoodsSkusCard(id, data) {
+    return axios.post(`/admin/goods_skus_card/${id}`, data)
+}
+
+export function deleteGoodsSkusCard(id) {
+    return axios.post(`/admin/goods_skus_card/${id}/delete`)
+}
+
+export function sorcGoodsSkusCard(data) {
+    return axios.post(`/admin/goods_skus_card/sort`,data)
+}
+
+export function createGoodsSkusCardValue(data) {
+    return axios.post(`/admin/goods_skus_card_value`, data)
+}
+
+export function updateGoodsSkusCardValue(id, data) {
+    return axios.post(`admin/goods_skus_card_value/${id}`, data)
+}
+
+export function deleteGoodsSkusCardValue(id) {
+    return axios.post(`/admin/goods_skus_card_value/${id}/delete`)
+}
+
+export function chooseAndSetGoodsSkusCard(id,data) {
+    return axios.post(`admin/goods_skus_card/${id}/set`,data)
 }

@@ -136,7 +136,8 @@ export function useInitTable(opt = {}) {
         handleSelectionChange,
         multipleTableRef,
         handleMultiDelete,
-        handleMultiStatusChange
+        handleMultiStatusChange,
+        multiSelectionIds
     }
 }
 
