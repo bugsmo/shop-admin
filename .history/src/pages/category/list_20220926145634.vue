@@ -9,14 +9,12 @@
                 <div class="custom-node-tree">
                     <span>{{data.name}}</span>
                     <div class="ml-auto">
-                        <el-button text type="primary" size="small" @click="openGoodsDrawer(data)" :loading="data.goodsDrawerLoading">推荐商品</el-button>
-
                         <el-switch :modelValue="data.status" :active-value="1" :inactive-value="0"
                             @change="handleStatusChange($event,data)">
                         </el-switch>
                         <el-button text type="primary" size="small" @click.stop="handleEdit(data)">修改</el-button>
-                        
-                        <el-popconfirm title="是否要删除该分类?" confirm-button-text="确认" cancel-button-text="取消"
+                        <el-button text type="primary" size="small" @click.stop="addChild(data.id)">增加</el-button>
+                        <el-popconfirm title="是否要删除该记录?" confirm-button-text="确认" cancel-button-text="取消"
                             @confirm="handleDelete(data.id)">
                             <template #reference>
                                 <el-button text type="primary" size="small">删除
@@ -30,24 +28,46 @@
 
         <FormDrawer ref="formDrawerRef" :title="drawerTitle" @submit="handleSubmit">
             <el-form :model="form" ref="formRef" :rules="rules" label-width="80px" :inline="false">
-                <el-form-item label="分类名称" prop="name">
-                    <el-input v-model="form.name" placeholder="分类名称"></el-input>
+                <el-form-item label="菜单/规则" prop="menu">
+                    <el-radio-group v-model="form.menu">
+                        <el-radio :label="1" border>菜单</el-radio>
+                        <el-radio :label="0" border>规则</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="名称" prop="name">
+                    <el-input v-model="form.name" style="width:30%;" placeholder="名称"></el-input>
+                </el-form-item>
+                <el-form-item label="菜单图标" prop="icon" v-if="form.menu == 1">
+                    <IconSelect v-model="form.icon" />
+                </el-form-item>
+                <el-form-item label="前端路由" prop="frontpath" v-if="form.menu == 1 && form.rule_id>0" placeholder="前端路由">
+                    <el-input v-model="form.frontpath"></el-input>
+                </el-form-item>
+                <el-form-item label="后端规则" prop="condition" v-if="form.menu == 0">
+                    <el-input v-model="form.condition" placeholder="后端规则"></el-input>
+                </el-form-item>
+                <el-form-item label="请求方式" prop="method" v-if="form.menu == 0">
+                    <el-select v-model="form.method" class="m-2" placeholder="请选择请求方式">
+                        <el-option v-for="item in ['GET','POST','DELETE','PUT']" :key="item" :label="item"
+                            :value="item" />
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="排序" prop="order">
+                    <el-input-number v-model="form.order" :min="0" :max="1000" />
                 </el-form-item>
             </el-form>
 
         </FormDrawer>
     </el-card>
 
-    <GoodsDrawer ref="goodsDrawerRef" />
-
 </template>
 <script setup>
-import {ref} from 'vue';
+import { ref } from 'vue'
 import ListHeader from '~/components/ListHeader.vue';
 import { getCategoryList, createCategory, updateCategory, updateCategoryStatus, deleteCategory } from '~/api/category.js'
 import { useInitTable, useInitForm } from '~/composables/useCommon.js';
 import FormDrawer from '~/components/FormDrawer.vue';
-import GoodsDrawer from './components/GoodsDrawer.vue';
+import IconSelect from '~/components/IconSelect.vue';
 
 const {
     loading,
@@ -58,11 +78,7 @@ const {
 } = useInitTable({
     getList: getCategoryList,
     onGetListSuccess: (res) => {
-        tableData.value = res.map(o=>{
-            o.goodsDrawerLoading = false
-            return o
-        })
-
+        tableData.value = res
     },
     delete: deleteCategory,
     updateStatus: updateCategoryStatus
@@ -82,21 +98,30 @@ const {
     update: updateCategory,
     create: createCategory,
     form: {
-        name: ""
+        rule_id: 0,
+        menu: 0,
+        name: "",
+        condition: "",
+        method: "GET",
+        status: 1,
+        order: 50,
+        icon: "",
+        frontpath: ""
     },
     rules: {
     }
 })
 
+//添加子分类
+const addChild = (id) => {
+    handleCreate()
+    form.rule_id = id
+    form.status = 1
+}
+
 const defaultProps = {
     label: "name",
     children: "child",
-}
-
-const goodsDrawerRef =ref(null)
-//data当前对象
-const openGoodsDrawer = (data)=>{
-    goodsDrawerRef.value.open(data)
 }
 </script>
 

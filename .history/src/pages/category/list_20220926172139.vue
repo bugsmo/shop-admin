@@ -9,7 +9,7 @@
                 <div class="custom-node-tree">
                     <span>{{data.name}}</span>
                     <div class="ml-auto">
-                        <el-button text type="primary" size="small" @click="openGoodsDrawer(data)" :loading="data.goodsDrawerLoading">推荐商品</el-button>
+                        <el-button text type="primary" size="small" @click="openGoodsDrawer(data)" v-loading="data.goodsDrawerLoading">推荐商品</el-button>
 
                         <el-switch :modelValue="data.status" :active-value="1" :inactive-value="0"
                             @change="handleStatusChange($event,data)">

@@ -9,14 +9,14 @@
                 <div class="custom-node-tree">
                     <span>{{data.name}}</span>
                     <div class="ml-auto">
-                        <el-button text type="primary" size="small" @click="openGoodsDrawer(data)" :loading="data.goodsDrawerLoading">推荐商品</el-button>
+                        <el-button text type="primary" size="small">推荐商品</el-button>
 
                         <el-switch :modelValue="data.status" :active-value="1" :inactive-value="0"
                             @change="handleStatusChange($event,data)">
                         </el-switch>
                         <el-button text type="primary" size="small" @click.stop="handleEdit(data)">修改</el-button>
                         
-                        <el-popconfirm title="是否要删除该分类?" confirm-button-text="确认" cancel-button-text="取消"
+                        <el-popconfirm title="是否要删除该记录?" confirm-button-text="确认" cancel-button-text="取消"
                             @confirm="handleDelete(data.id)">
                             <template #reference>
                                 <el-button text type="primary" size="small">删除
@@ -38,16 +38,14 @@
         </FormDrawer>
     </el-card>
 
-    <GoodsDrawer ref="goodsDrawerRef" />
-
 </template>
 <script setup>
-import {ref} from 'vue';
+import { ref } from 'vue'
 import ListHeader from '~/components/ListHeader.vue';
 import { getCategoryList, createCategory, updateCategory, updateCategoryStatus, deleteCategory } from '~/api/category.js'
 import { useInitTable, useInitForm } from '~/composables/useCommon.js';
 import FormDrawer from '~/components/FormDrawer.vue';
-import GoodsDrawer from './components/GoodsDrawer.vue';
+import IconSelect from '~/components/IconSelect.vue';
 
 const {
     loading,
@@ -58,11 +56,7 @@ const {
 } = useInitTable({
     getList: getCategoryList,
     onGetListSuccess: (res) => {
-        tableData.value = res.map(o=>{
-            o.goodsDrawerLoading = false
-            return o
-        })
-
+        tableData.value = res
     },
     delete: deleteCategory,
     updateStatus: updateCategoryStatus
@@ -82,7 +76,15 @@ const {
     update: updateCategory,
     create: createCategory,
     form: {
-        name: ""
+        rule_id: 0,
+        menu: 0,
+        name: "",
+        condition: "",
+        method: "GET",
+        status: 1,
+        order: 50,
+        icon: "",
+        frontpath: ""
     },
     rules: {
     }
@@ -91,12 +93,6 @@ const {
 const defaultProps = {
     label: "name",
     children: "child",
-}
-
-const goodsDrawerRef =ref(null)
-//data当前对象
-const openGoodsDrawer = (data)=>{
-    goodsDrawerRef.value.open(data)
 }
 </script>
 
