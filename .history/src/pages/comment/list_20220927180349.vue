@@ -33,7 +33,7 @@
                 </template>
             </el-table-column>
             <el-table-column label="评价时间" width="180" prop="review_time" align="center"/>
-            <el-table-column label="状态" align="center">
+            <el-table-column label="状态" width="120">
                 <template #default="{ row }">
                     <el-switch :modelValue="row.status" :loading="row.statusLoading" :active-value="1"
                         :inactive-value="0" :disabled="row.super == 1" @change="handleStatusChange($event,row)">
