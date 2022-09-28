@@ -230,18 +230,6 @@ const openInfoModal = (row) => {
 
 //退款处理
 const handleRefund = ((id, agree)=>{
-    (agree ? showModal("是否要同意该订单退款") : showPrompt("请输入拒绝的理由"))
-    .then(({ value })=>{
-        let data = { agree }
-        console.log({ agree });
-        if(!agree){
-            data.disagree_reason = value
-        }
-        refundOrder(id,data)
-        .then(res=>{
-            getData()
-            toast("操作成功")
-        })
-    })
+    agree ? showModal("是否要同意该订单退款") : showPrompt("请输入拒绝的理由")
 })
 </script>

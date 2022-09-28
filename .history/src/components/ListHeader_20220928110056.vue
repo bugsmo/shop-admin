@@ -14,23 +14,21 @@
             <slot/>
         </div>
 
-        <div>
-            <el-tooltip v-if="btns.includes('refresh')" effect="dark" content="刷新" placement="top">
-                <el-button>
-                    <el-icon :size="20" @click="$emit('refresh')">
-                        <Refresh />
-                    </el-icon>
-                </el-button>
-            </el-tooltip>
-            
-            <el-tooltip v-if="btns.includes('download')" effect="dark" content="下载" placement="top">
-                <el-button>
-                    <el-icon :size="20" @click="$emit('download')">
-                        <Download />
-                    </el-icon>
-                </el-button>
-            </el-tooltip>
-        </div>
+        <el-tooltip v-if="btns.includes('refresh')" effect="dark" content="刷新" placement="top">
+            <el-button>
+                <el-icon :size="20">
+                    <Refresh @click="$emit('refresh')" />
+                </el-icon>
+            </el-button>
+        </el-tooltip>
+
+        <el-tooltip v-if="btns.includes('download')" effect="dark" content="下载" placement="top">
+            <el-button>
+                <el-icon :size="20">
+                    <Refresh @click="$emit('refresh')" />
+                </el-icon>
+            </el-button>
+        </el-tooltip>
     </div>
 </template>
 <script setup>
@@ -45,5 +43,5 @@ const props = defineProps({
 
 const btns = computed(() => props.layout.split(","))
 
-defineEmits(["create", "delete", "refresh","download"])
+defineEmits(["create", "delete", "refresh",])
 </script>

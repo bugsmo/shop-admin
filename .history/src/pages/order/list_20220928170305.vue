@@ -125,11 +125,10 @@
 import ListHeader from '~/components/ListHeader.vue';
 import Search from '~/components/Search.vue';
 import SearchItem from '~/components/SearchItem.vue';
-import { getOrderList, deleteOrder, refundOrder } from '~/api/order.js';
+import { getOrderList, deleteOrder } from '~/api/order.js';
 import { useInitTable } from '~/composables/useCommon.js';
 import ExportExcel from './ExportExcel.vue';
 import InfoModal from './InfoModal.vue';
-import { toast, showPrompt, showModal } from '~/composables/utils';
 
 const {
     searchForm,
@@ -227,21 +226,4 @@ const openInfoModal = (row) => {
     info.value = row
     InfoModalRef.value.open()
 }
-
-//退款处理
-const handleRefund = ((id, agree)=>{
-    (agree ? showModal("是否要同意该订单退款") : showPrompt("请输入拒绝的理由"))
-    .then(({ value })=>{
-        let data = { agree }
-        console.log({ agree });
-        if(!agree){
-            data.disagree_reason = value
-        }
-        refundOrder(id,data)
-        .then(res=>{
-            getData()
-            toast("操作成功")
-        })
-    })
-})
 </script>

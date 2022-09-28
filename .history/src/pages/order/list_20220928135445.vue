@@ -84,21 +84,21 @@
                         </div>
                         <div>
                             收货状态：
-                            <el-tag :type="row.ship_status == 'received' ? 'success' : 'info'" size="small">
-                                {{row.ship_status == 'received' ? '已收货' : '未收货'}}</el-tag>
+                            <el-tag :type="row.ship_status == 'reviewed' ? 'success' : 'info'" size="small">
+                                {{row.ship_data == 'reviewed' ? '已收货' : '未收货'}}</el-tag>
                         </div>
                     </template>
                 </el-table-column>
                 <el-table-column label="总库存" width="90" prop="stock" align="center"></el-table-column>
                 <el-table-column label="操作" align="center">
-                    <template #default="{row}">
+                    <template #default="scope">
                         <div v-if="searchForm.tab != 'delete'">
-                            <el-button class="px-1" size="small" @click="openInfoModal(row)">订单详情</el-button>
+                            <el-button class="px-1" size="small">订单详情</el-button>
                             <el-button v-if="searchForm.tab === 'noship'" class="px-1" size="small" text>订单发货
                             </el-button>
-                            <el-button v-if="searchForm.tab === 'refunding'" class="px-1" size="small" text @click="handleRefund(row.id,1)">同意退款
+                            <el-button v-if="searchForm.tab === 'refunding'" class="px-1" size="small" text>同意退款
                             </el-button>
-                            <el-button v-if="searchForm.tab === 'refunding'" class="px-1" size="small" text @click="handleRefund(row.id,0)">拒绝退款
+                            <el-button v-if="searchForm.tab === 'refunding'" class="px-1" size="small" text>拒绝退款
                             </el-button>
                         </div>
                     </template>
@@ -114,7 +114,6 @@
         </el-card>
 
         <ExportExcel :tabbars="tabbars" ref="ExportExcelRef" />
-        <InfoModal  ref="InfoModalRef" :info="info" />
 
     </div>
 
@@ -125,11 +124,9 @@
 import ListHeader from '~/components/ListHeader.vue';
 import Search from '~/components/Search.vue';
 import SearchItem from '~/components/SearchItem.vue';
-import { getOrderList, deleteOrder, refundOrder } from '~/api/order.js';
+import { getOrderList, deleteOrder } from '~/api/order.js';
 import { useInitTable } from '~/composables/useCommon.js';
 import ExportExcel from './ExportExcel.vue';
-import InfoModal from './InfoModal.vue';
-import { toast, showPrompt, showModal } from '~/composables/utils';
 
 const {
     searchForm,
@@ -205,43 +202,9 @@ const tabbars = [
 ]
 
 const ExportExcelRef = ref(null)
+
+
 const handleExportExecl = ()=>{
     ExportExcelRef.value.open()
 }
-
-const InfoModalRef = ref(null)
-const info = ref(null)
-const openInfoModal = (row) => {
-    row.order_items = row.order_items.map(o=>{
-        if (o.skus_type == 1 && o.goods_skus){
-            let s = []
-            for(const k in o.goods_skus.skus){
-                s.push(o.goods_skus.skus[k].value)
-            }
-            o.sku = s.join(",")
-            
-        }
-        return o
-    })
-    // console.log(row);
-    info.value = row
-    InfoModalRef.value.open()
-}
-
-//退款处理
-const handleRefund = ((id, agree)=>{
-    (agree ? showModal("是否要同意该订单退款") : showPrompt("请输入拒绝的理由"))
-    .then(({ value })=>{
-        let data = { agree }
-        console.log({ agree });
-        if(!agree){
-            data.disagree_reason = value
-        }
-        refundOrder(id,data)
-        .then(res=>{
-            getData()
-            toast("操作成功")
-        })
-    })
-})
 </script>
