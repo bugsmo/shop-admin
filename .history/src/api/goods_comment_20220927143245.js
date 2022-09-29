@@ -1,0 +1,11 @@
+import axios from '~/axios'
+import { queryParams } from '~/composables/utils'
+
+export function getGoodsCommentList(page, query = {}) {
+    let r = queryParams(query)
+    return axios.get(`/admin/goods_comment/${page}${r}`)
+}
+
+export function updateGoodsCommentStatus(id,status){
+    return axios.post(`/admin/goods_comment/${id}/update_status`,{status})
+}
